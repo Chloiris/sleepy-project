@@ -21,9 +21,26 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.PORT }}
         script: |
+          # 进入网站目录
           cd /var/www/html
-          git pull origin main
-          # 如果需要重启服务
-          sudo systemctl reload apache2
-          # 或者 nginx
-          # sudo systemctl reload nginx 
+          
+          # 如果目录不存在，创建它
+          sudo mkdir -p /var/www/html
+          
+          # 如果Git仓库不存在，克隆它
+          if [ ! -d ".git" ]; then
+            sudo rm -rf /var/www/html/*
+            sudo git clone https://github.com/Chloiris/project-sleepy.git .
+          else
+            # 如果仓库存在，拉取最新代码
+            sudo git pull origin main
+          fi
+          
+          # 设置正确的权限
+          sudo chown -R www-data:www-data /var/www/html
+          sudo chmod -R 755 /var/www/html
+          
+          # 重启Nginx服务
+          sudo systemctl reload nginx
+          
+          echo "Deployment completed successfully!" 
