@@ -55,6 +55,11 @@ h1, h2, h3 {
     border-radius: 20px;
     background-color: rgba(30, 30, 30, 0.96); /* 调暗卡片背景颜色 */
     color: white; /* 确保卡片内文字颜色也是白色 */
+    transition: background-color 0.3s ease; /* 添加过渡效果 */
+}
+
+.card:hover {
+    background-color: rgba(45, 45, 45, 0.96); /* 悬停时颜色变浅 */
 }
 
 .link {
