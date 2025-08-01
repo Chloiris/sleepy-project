@@ -5,6 +5,7 @@ import pygetwindow as gw
 import urllib3
 import ctypes
 from ctypes import wintypes
+import atexit
 from config import HASS_URL, HASS_TOKEN, UPDATE_INTERVAL, IGNORE_SSL_ERRORS, ATTRIBUTES
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -71,13 +72,19 @@ def update_hass_state(state):
         print(f"Error updating Home Assistant state: {e}")
 
 def handle_exit(signum, frame):
-    print("Script exiting, setting state to 'unavailable'")
-    update_hass_state("unavailable")
+    print("Script exiting, setting state to 'Windows 关机'")
+    update_hass_state("Windows 关机")
     exit(0)
+
+def cleanup_on_exit():
+    """程序退出时的清理函数"""
+    print("Program shutting down, setting state to 'Windows 关机'")
+    update_hass_state("Windows 关机")
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, handle_exit)
     signal.signal(signal.SIGTERM, handle_exit)
+    atexit.register(cleanup_on_exit)  # 注册退出时的清理函数
 
     print("Script started, reporting active window title to Home Assistant...")
     try:
