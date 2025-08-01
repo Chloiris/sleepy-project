@@ -23,6 +23,17 @@ export function marsState(data) {
             windowTitle.includes('code')) {
             marsStateElement.textContent = '醒着';
             marsStateElement.style.color = 'green';
+            
+            // 添加在线提示
+            let statusHint = document.getElementById('status-hint');
+            if (!statusHint) {
+                statusHint = document.createElement('div');
+                statusHint.id = 'status-hint';
+                statusHint.style.cssText = 'font-size: 12px; color: white; margin-top: 5px; opacity: 0.8;';
+                marsStateElement.parentNode.appendChild(statusHint);
+            }
+            statusHint.textContent = '目前在线，可以通过任何可用的联系方式联系本人。';
+            statusHint.style.display = 'block';
         } else if (windowTitle.includes('sleep') || 
                    windowTitle.includes('idle') || 
                    windowTitle.includes('lock') ||
@@ -36,9 +47,26 @@ export function marsState(data) {
                    windowTitle.includes('windows 关机')) {
             marsStateElement.textContent = '睡似了';
             marsStateElement.style.color = 'gray';
+            
+            // 隐藏在线提示
+            let statusHint = document.getElementById('status-hint');
+            if (statusHint) {
+                statusHint.style.display = 'none';
+            }
         } else {
             marsStateElement.textContent = '醒着'; // Default to awake if not recognized as sleeping
             marsStateElement.style.color = 'green';
+            
+            // 添加在线提示
+            let statusHint = document.getElementById('status-hint');
+            if (!statusHint) {
+                statusHint = document.createElement('div');
+                statusHint.id = 'status-hint';
+                statusHint.style.cssText = 'font-size: 12px; color: white; margin-top: 5px; opacity: 0.8;';
+                marsStateElement.parentNode.appendChild(statusHint);
+            }
+            statusHint.textContent = '目前在线，可以通过任何可用的联系方式联系本人。';
+            statusHint.style.display = 'block';
         }
     } else {
         // 检查是否因为关机而离线
@@ -58,6 +86,12 @@ export function marsState(data) {
         } else {
             marsStateElement.textContent = '未知';
             marsStateElement.style.color = 'red';
+            
+            // 隐藏在线提示
+            let statusHint = document.getElementById('status-hint');
+            if (statusHint) {
+                statusHint.style.display = 'none';
+            }
         }
     }
 }
