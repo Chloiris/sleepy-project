@@ -3,6 +3,8 @@ import signal
 import requests
 import pygetwindow as gw
 import urllib3
+import ctypes
+from ctypes import wintypes
 from config import HASS_URL, HASS_TOKEN, UPDATE_INTERVAL, IGNORE_SSL_ERRORS, ATTRIBUTES
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -12,8 +14,37 @@ HEADERS = {
     "Content-Type": "application/json",
 }
 
+def is_system_sleeping():
+    """检测系统是否处于睡眠状态"""
+    try:
+        # 使用Windows API检测系统状态
+        ES_CONTINUOUS = 0x80000000
+        ES_SYSTEM_REQUIRED = 0x00000001
+        
+        # 获取系统电源状态
+        kernel32 = ctypes.windll.kernel32
+        result = kernel32.GetSystemPowerStatus(ctypes.byref(ctypes.c_ulong()))
+        
+        # 检查是否有活跃的窗口
+        window = gw.getActiveWindow()
+        if not window:
+            return True
+            
+        # 如果窗口标题为空或不可见，可能是睡眠状态
+        if not window.title or not window.visible:
+            return True
+            
+        return False
+    except Exception as e:
+        print(f"Error checking sleep status: {e}")
+        return False
+
 def get_active_window_title():
     try:
+        # 首先检查是否处于睡眠状态
+        if is_system_sleeping():
+            return "Windows 睡眠模式"
+            
         window = gw.getActiveWindow()
         return window.title if window else None
     except Exception as e:

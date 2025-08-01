@@ -29,7 +29,8 @@ export function marsState(data) {
                    windowTitle.includes('关机') ||
                    windowTitle.includes('shutdown') ||
                    windowTitle.includes('power off') ||
-                   windowTitle.includes('shut down')) {
+                   windowTitle.includes('shut down') ||
+                   windowTitle.includes('睡眠模式')) {
             marsStateElement.textContent = '睡似了';
             marsStateElement.style.color = 'gray';
         } else {
