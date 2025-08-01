@@ -55,28 +55,51 @@ if ($country !== 'N/A') {
     }
 }
 
-// 构造 API 请求
-$url = "$endpoint/$key/Project Sleepy/You were hit $times time";
-if ($times != 1) {
-    $url .= "s";
-}
+// 记录到日志文件
+$log_entry = date('Y-m-d H:i:s') . " - 用户点击了 $times 次";
 if (!empty($message)) {
-    $url .= ": " . urlencode($message);
-} else {
-    $url .= ".";
+    $log_entry .= "，附言: $message";
+}
+$log_entry .= " - IP: $client_ip";
+if (!empty($location)) {
+    $log_entry .= " - 位置: $location";
+}
+$log_entry .= "\n";
+
+file_put_contents(__DIR__ . '/boom.log', $log_entry, FILE_APPEND | LOCK_EX);
+
+// 构造 Telegram API 请求
+$message_text = "🔔 *Project Sleepy 提醒*\n\n";
+$message_text .= "你被点击了 *$times* 次";
+if (!empty($message)) {
+    $message_text .= "\n附言: $message";
 }
 
 if (!empty($location)) {
-    $url .= "/From: " . urlencode($location) . " [" . $client_ip . "]";
+    $message_text .= "\n\n📍 来自: $location";
 } else {
-    $url .= "/From: " . $client_ip;
+    $message_text .= "\n\n📍 来自: $client_ip";
 }
 
-$url .= "?icon=$icon";
+$message_text .= "\n\n🌐 [查看网站](https://sleepy.chlogonia.top)";
+
+$post_data = [
+    'chat_id' => $chat_id,
+    'text' => $message_text,
+    'parse_mode' => 'Markdown',
+    'disable_web_page_preview' => true
+];
 
 // 记录 API 请求的时间
 $api_start = microtime(true);
-$response = @file_get_contents($url);
+$context = stream_context_create([
+    'http' => [
+        'method' => 'POST',
+        'header' => 'Content-Type: application/x-www-form-urlencoded',
+        'content' => http_build_query($post_data)
+    ]
+]);
+$response = @file_get_contents($endpoint . $key . '/sendMessage', false, $context);
 $api_end = microtime(true);
 
 if ($response === false) {
