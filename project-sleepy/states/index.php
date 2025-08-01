@@ -2,7 +2,7 @@
 require_once 'config.php';
 
 // 添加模拟数据选项
-$useMockData = true; // 设置为 true 使用模拟数据，false 使用真实 Home Assistant
+$useMockData = false; // 设置为 true 使用模拟数据，false 使用真实 Home Assistant
 
 if ($useMockData) {
     // 使用模拟数据
