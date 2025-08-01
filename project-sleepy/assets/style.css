@@ -109,11 +109,17 @@ hr{
     border-radius: 15px; /* 圆角 */
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2); /* 轻微阴影 */
     cursor: pointer;
-    transition: transform 0.2s ease-in-out;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 #boomContainer img:hover {
     transform: scale(1.1); /* 悬停时微微放大 */
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.3); /* 悬停时阴影加深 */
+}
+
+#boomContainer img:active {
+    transform: scale(0.95); /* 按下去时缩小 */
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4); /* 按下去时阴影变浅 */
 }
 
 #message {
