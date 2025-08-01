@@ -63,7 +63,7 @@ function sendRequest() {
             })
             .then(response => response.json())
             .then(data => {
-                if (data.code === 200) {
+                if (data.ok === true) {
                     let result = `提醒已收到!<br>你打了荷包蛋${count}次`;
                     if (message) {
                         result += `，并且附言:<br>${message}`;
