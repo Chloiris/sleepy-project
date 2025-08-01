@@ -23,6 +23,7 @@ $entities = [
     "input_text.mars_state" => [],
     "input_text.mars_mac_mini" => [],
     "input_text.mars_legion" => [],
+    "input_text.my_windows" => ["last_updated"],
     "input_text.message" => ["last_updated"],
 ];
 
