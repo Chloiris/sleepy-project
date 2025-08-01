@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    environment:
+      - TZ=Asia/Shanghai
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  # ESPHome 服务（用于管理ESP32设备）
+  esphome:
+    container_name: esphome
+    image: "ghcr.io/esphome/esphome:latest"
+    volumes:
+      - ./esphome:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - "6052:6052"
+    environment:
+      - TZ=Asia/Shanghai
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  # 数据库备份服务
+  mariadb:
+    container_name: homeassistant_db
+    image: "mariadb:10.6"
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "your_mysql_root_password"
+      MYSQL_DATABASE: "homeassistant"
+      MYSQL_USER: "homeassistant"
+      MYSQL_PASSWORD: "your_mysql_password"
+    volumes:
+      - ./database:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3306:3306"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  # 监控服务
+  watchtower:
+    container_name: watchtower
+    image: "containrrr/watchtower:latest"
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_SCHEDULE=0 0 2 * * *
+      - TZ=Asia/Shanghai
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false" 

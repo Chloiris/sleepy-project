@@ -1,5 +1,12 @@
 FROM php:8.1-apache
 
+# 安装系统依赖
+RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    pkg-config \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 # 安装必要的PHP扩展
 RUN docker-php-ext-install curl json
 

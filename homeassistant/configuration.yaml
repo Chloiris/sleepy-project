@@ -1,0 +1,170 @@
+# Home Assistant 配置文件 - Project Sleepy
+# 基于您的ESP32设备和网站需求
+
+# 基础配置
+default_config:
+
+# 启用API（必需）
+api:
+
+# 启用前端
+frontend:
+
+# 启用历史记录
+recorder:
+  db_url: sqlite:///home-assistant_v2.db
+  commit_interval: 1
+  auto_purge: true
+  auto_repack: true
+
+# 启用自动化
+automation:
+
+# 启用脚本
+script:
+
+# 启用场景
+scene:
+
+# 启用输入帮助器（Project Sleepy核心组件）
+input_boolean:
+  awake:
+    name: "醒着状态"
+    icon: mdi:eye
+    initial: true
+  private_mode:
+    name: "隐私模式"
+    icon: mdi:eye-off
+    initial: false
+
+input_text:
+  mars_state:
+    name: "火星状态"
+    icon: mdi:planet
+    max: 50
+    initial: "未知"
+  my_windows:
+    name: "当前窗口"
+    icon: mdi:monitor
+    max: 255
+    initial: "未知"
+  message:
+    name: "消息"
+    icon: mdi:message-text
+    max: 255
+    initial: ""
+
+input_datetime:
+  message_timer:
+    name: "消息过期时间"
+    has_date: true
+    has_time: true
+    initial: "2025-12-31 23:59:59"
+
+input_button:
+  message_expire:
+    name: "手动过期消息"
+    icon: mdi:delete
+
+# 启用HTTP集成（用于外部API调用）
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1
+    - ::1
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+
+# 启用REST集成（用于外部API）
+rest:
+
+# 启用模板集成
+template:
+
+# 启用时间集成
+time:
+
+# 启用日期集成
+date:
+
+# 启用数字集成
+input_number:
+  temperature_threshold:
+    name: "温度阈值"
+    min: 0
+    max: 50
+    step: 0.1
+    unit_of_measurement: "°C"
+    initial: 25.0
+
+# 日志配置
+logger:
+  default: info
+  logs:
+    homeassistant.components.api: debug
+    homeassistant.components.http: debug
+    homeassistant.components.rest: debug
+
+# 自动化示例
+automation:
+  # 自动过期消息
+  - alias: "自动过期消息"
+    trigger:
+      platform: time
+      at: "00:00:00"
+    condition:
+      condition: template
+      value_template: "{{ states('input_datetime.message_timer') != 'unavailable' }}"
+    action:
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.message
+        data:
+          value: "EXPIRED"
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.message_timer
+        data:
+          datetime: "2025-12-31 23:59:59"
+
+  # 隐私模式切换时记录日志
+  - alias: "隐私模式切换日志"
+    trigger:
+      platform: state
+      entity_id: input_boolean.private_mode
+    action:
+      - service: persistent_notification.create
+        data:
+          title: "隐私模式状态"
+          message: "隐私模式已{{ '启用' if is_state('input_boolean.private_mode', 'on') else '禁用' }}"
+
+# 脚本示例
+script:
+  reset_message:
+    alias: "重置消息"
+    sequence:
+      - service: input_text.set_value
+        target:
+          entity_id: input_text.message
+        data:
+          value: ""
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.message_timer
+        data:
+          datetime: "2025-12-31 23:59:59"
+
+  set_awake:
+    alias: "设置为醒着"
+    sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.awake
+
+  set_sleeping:
+    alias: "设置为睡觉"
+    sequence:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.awake 

@@ -26,13 +26,16 @@ def update_hass_state(state):
             "state": state,
             "attributes": ATTRIBUTES,
         }
+        # 修改为Project Sleepy期望的实体名称
+        api_url = f"{HASS_URL}/api/states/input_text.my_windows"
         response = requests.post(
-            HASS_URL,
+            api_url,
             headers=HEADERS,
             json=data,
             verify=not IGNORE_SSL_ERRORS
         )
         response.raise_for_status()
+        print(f"Successfully updated state: {state}")
     except requests.RequestException as e:
         print(f"Error updating Home Assistant state: {e}")
 
