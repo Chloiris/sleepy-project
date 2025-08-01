@@ -1,10 +1,10 @@
 export function message(data) {
     const messageContainer = document.querySelector('.message-container');
-    const message = data['input_text.message']?.state;
-    const lastUpdated = data['input_text.message']?.last_updated;
+    const currentWindow = data['input_text.my_windows']?.state;
+    const lastUpdated = data['input_text.my_windows']?.last_updated;
     
-    // 检查消息是否有效，并且不是 "unavailable" 或 "EXPIRED"
-    if (message && message !== 'unavailable' && message !== 'EXPIRED') {
+    // 检查当前窗口信息是否有效，并且不是 "unavailable" 或 "未知"
+    if (currentWindow && currentWindow !== 'unavailable' && currentWindow !== '未知') {
         // 创建一个新的 Date 对象，表示最后更新时间
         const updatedDate = new Date(lastUpdated);
         
@@ -44,15 +44,15 @@ export function message(data) {
             dateString = `${month}月${day}日`;
         }
         
-        // 构建 HTML 结构，确保日期和时间之间无空格
+        // 构建 HTML 结构，显示当前窗口信息
         messageContainer.innerHTML = `
             <div class="card">
-                <h2>${message}</h2>
-                <h4>来自荷包蛋的消息 发布于${dateString}${timeString}</h4>
+                <h2><i class="fa-solid fa-desktop"></i> ${currentWindow}</h2>
+                <h4>当前窗口 更新于${dateString}${timeString}</h4>
             </div>
         `;
     } else {
-        // 如果消息无效，则隐藏消息容器
+        // 如果窗口信息无效，则隐藏消息容器
         messageContainer.innerHTML = '';
     }
 }
