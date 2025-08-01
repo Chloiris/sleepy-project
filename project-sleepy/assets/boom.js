@@ -49,7 +49,7 @@ function sendRequest() {
     const message = document.getElementById("message").value.trim();
     
     grecaptcha.ready(function() {
-        grecaptcha.execute('6Ld0SNgqAAAAAJSHgR96yQysjWUPl_HASSj3SfY7', { action: 'submit' }).then(function(token) {
+        grecaptcha.execute('6Le-8pUrAAAAADhTuMz128xmuMZyZeyhfUecfE5v', { action: 'submit' }).then(function(token) {
             let url = `boom/`;
             let data = new URLSearchParams();
             data.append("times", count);

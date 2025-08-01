@@ -1,0 +1,5 @@
+[33m7a8ad06[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Change message display to show current window instead of test message
+[33mcca3590[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Add shutdown detection: last_seen timeout and exit handlers
+[33m2d38124[m Add sleep mode detection to Windows app and frontend
+[33m4a41484[m Change '睡死了' back to '睡似了' and add shutdown detection
+[33mbf82836[m Fix mars-state.js to handle lock screen and update entity name
