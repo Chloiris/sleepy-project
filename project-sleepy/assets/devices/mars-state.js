@@ -29,7 +29,7 @@ export function marsState(data) {
             if (!statusHint) {
                 statusHint = document.createElement('div');
                 statusHint.id = 'status-hint';
-                statusHint.style.cssText = 'font-size: 12px; color: white; margin-top: 5px; opacity: 0.8;';
+                statusHint.style.cssText = 'font-size: 16px; color: white; margin-top: 15px; opacity: 0.9; font-weight: normal;';
                 marsStateElement.parentNode.appendChild(statusHint);
             }
             statusHint.textContent = '目前在线，可以通过任何可用的联系方式联系本人。';
@@ -62,7 +62,7 @@ export function marsState(data) {
             if (!statusHint) {
                 statusHint = document.createElement('div');
                 statusHint.id = 'status-hint';
-                statusHint.style.cssText = 'font-size: 12px; color: white; margin-top: 5px; opacity: 0.8;';
+                statusHint.style.cssText = 'font-size: 16px; color: white; margin-top: 15px; opacity: 0.9; font-weight: normal;';
                 marsStateElement.parentNode.appendChild(statusHint);
             }
             statusHint.textContent = '目前在线，可以通过任何可用的联系方式联系本人。';
