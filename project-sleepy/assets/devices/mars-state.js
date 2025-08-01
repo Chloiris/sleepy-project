@@ -25,8 +25,12 @@ export function marsState(data) {
                    windowTitle.includes('idle') || 
                    windowTitle.includes('lock') ||
                    windowTitle.includes('screensaver') ||
-                   windowTitle.includes('锁屏界面')) {
-            marsStateElement.textContent = '睡死了';
+                   windowTitle.includes('锁屏界面') ||
+                   windowTitle.includes('关机') ||
+                   windowTitle.includes('shutdown') ||
+                   windowTitle.includes('power off') ||
+                   windowTitle.includes('shut down')) {
+            marsStateElement.textContent = '睡似了';
             marsStateElement.style.color = 'gray';
         } else {
             marsStateElement.textContent = '醒着'; // Default to awake if not recognized as sleeping
