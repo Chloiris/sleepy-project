@@ -27,32 +27,22 @@ function updateCacheInfo(data) {
     clearInterval(window.previousAgeInterval);
     clearInterval(window.previousCountdownInterval);
 
-    // 显示缓存状态
-    let age = data.cache_age || 0;
-    if (data.cached) {
-        cacheStateElement.textContent = `已读取缓存，数据更新于 ${age} 秒前`;
-    } else {
-        cacheStateElement.textContent = `即时数据，更新于 ${age} 秒前`;
+    // 隐藏缓存状态显示
+    if (cacheStateElement) {
+        cacheStateElement.style.display = 'none';
     }
-    cacheStateElement.style.display = 'block';
-
-    // 每秒更新缓存年龄
-    window.previousAgeInterval = setInterval(() => {
-        age++;
-        if (data.cached) {
-            cacheStateElement.textContent = `已读取缓存，数据更新于 ${age} 秒前`;
-        } else {
-            cacheStateElement.textContent = `即时数据，更新于 ${age} 秒前`;
-        }
-    }, 1000);
 
     // 下一次更新倒计时
     let nextUpdate = 15; // 定时刷新为15秒
-    updateElement.textContent = `下一次自动更新: ${nextUpdate} 秒后`;
+    if (updateElement) {
+        updateElement.textContent = `下一次自动更新: ${nextUpdate} 秒后`;
+    }
 
     window.previousCountdownInterval = setInterval(() => {
         nextUpdate--;
-        updateElement.textContent = `下一次自动更新: ${nextUpdate} 秒后`;
+        if (updateElement) {
+            updateElement.textContent = `下一次自动更新: ${nextUpdate} 秒后`;
+        }
         if (nextUpdate <= 0) {
             clearInterval(window.previousCountdownInterval);
         }
